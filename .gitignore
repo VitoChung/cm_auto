@@ -1,0 +1,5 @@
+*.xlsx
+*.json
+const.py
+.idea/
+__pycache__/
