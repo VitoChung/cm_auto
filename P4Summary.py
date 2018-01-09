@@ -162,7 +162,7 @@ def update_spreadsheet(hotfixes, readme):
 
   row_count = next_data[0]
   for hotfix in hotfixes:
-    if hotfix[10] > next_data[1]:
+    if time.strptime(hotfix[10],'%Y/%m/%d %H:%M:%S') > time.strptime(next_data[1],'%Y/%m/%d %H:%M:%S'):
       col_count = 1
       for o in hotfix:
         worksheet.update_cell(row_count, col_count, o)
