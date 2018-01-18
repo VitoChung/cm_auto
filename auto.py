@@ -1,6 +1,7 @@
 import time
 import P4Summary
 import CopyBuildBackup
+import HotfixMerge
 import os
 
 timefreq = 1800
@@ -10,18 +11,20 @@ def main():
 
         print('')
         print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-
+        start_time = time.time()
         try:
             os.system('E:\\Tool\\Install_Opengrok\\syn_opengrok.bat')
             CopyBuildBackup.main()
             print('')
             P4Summary.main()
+            HotfixMerge.main()
 
         except Exception as e:
             # log(str(e), level.error)
             print(str(e))
             pass
         finally:
+            print("time elapsed: {:.2f}s".format(time.time() - start_time))
             print('Idle..............................')
             time.sleep(timefreq)
 
