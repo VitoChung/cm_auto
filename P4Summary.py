@@ -70,7 +70,8 @@ def parse_P4_description(readme):
         if 'TT' in tmp_desc or 'SEG' in tmp_desc or 'VRTS' in tmp_desc:
           desc_case += refine_QA_changelist(tmp_desc) + '\n'
         elif 'HF' in tmp_desc:
-          desc_hotfix = tmp_desc
+          # desc_hotfix = tmp_desc
+          desc_hotfix = 'HFB' + get_hotfix_number(tmp_desc)
         elif 'B' in tmp_desc and 'BY' not in tmp_desc and 'BACK' not in tmp_desc and 'BASIC' not in tmp_desc:
           desc_build = tmp_desc
         elif desc_user == '' and tmp_desc != '':
