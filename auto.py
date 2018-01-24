@@ -24,6 +24,7 @@ def main():
             print(str(e))
             pass
         finally:
+            print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
             print("time elapsed: {:.2f}s".format(time.time() - start_time))
             print('Idle..............................')
             time.sleep(timefreq)

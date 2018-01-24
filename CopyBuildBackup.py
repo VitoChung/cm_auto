@@ -5,14 +5,20 @@ import os
 from ftplib import FTP
 
 import imaplib
-import time
 
 import socket
 from smb.SMBConnection import SMBConnection
+import shutil
+import stat
 
 def main():
         ### get mail
         try:
+            print('Remove local folder...')
+            local_backup_folder = const.HF_Working_Folder + '\\Build'
+            if os.path.isdir(local_backup_folder):
+                shutil.rmtree(local_backup_folder, onerror=on_rm_error)
+
             url = const.trend_mail_server
             mail_conn = imaplib.IMAP4_SSL(url, 993)
             user, password = (const.trend_account, const.trend_password)
@@ -44,6 +50,7 @@ def main():
                     # path = msg_contant.split('FTP Path	: ')[1].split(' </div> ')[0]
 
                     try:
+
                         print('Get Build from FTP...' + build_number + '  ' + lang)
                         ### download build
                         download_prepack_file(build_number, lang)
@@ -80,7 +87,7 @@ def process_multipart_message(message):
 
 
 def download_prepack_file(build_number, language):
-    build_dst = const.HF_Working_Folder + "\\build\\" + language + "\\B" + build_number
+    build_dst = const.HF_Working_Folder + "\\Build\\" + language + "\\B" + build_number
     filename = 'Prepack.zip'
 
     if not os.path.exists(build_dst + "\\" + filename):
@@ -102,7 +109,7 @@ def prepack_download_from_ftp(filename, download_folder, build_number, language)
         ftp.retrbinary('RETR ' + filename, fhandle.write)
         fhandle.close()
     except:
-        os.chdir(const.HF_Working_Folder + '\Build')
+        os.chdir(const.HF_Working_Folder + '\\Build')
         raise
     # log("Download {0} finished.".format(filename), level.info)
     print("Download {0} finished.".format(filename))
@@ -127,7 +134,7 @@ def save_file_to_smb(build_number, language):
         smb_conn = SMBConnection(const.nas_account, const.nas_password, 'any_name', remote_name)
         assert smb_conn.connect(const.nas_ip, timeout=30)
 
-        prepack_path = const.HF_Working_Folder + '\\build\\' + language
+        prepack_path = const.HF_Working_Folder + '\\Build\\' + language
         f = open(prepack_path + '\\B' + build_number + '\\Prepack.zip', 'rb')
 
         if language == 'ja':
@@ -146,6 +153,12 @@ def save_file_to_smb(build_number, language):
         # log(str(e), level.error)
         print(str(e))
         raise Exception('Failed! Save file to NAS unsuccessfully.')
+
+def on_rm_error(func, path, exc_info):
+    # path contains the path of the file that couldn't be removed
+    # let's just assume that it's read-only and unlink it.
+    os.chmod(path, stat.S_IWRITE)
+    os.unlink(path)
 
 if __name__ == '__main__':
     main()
