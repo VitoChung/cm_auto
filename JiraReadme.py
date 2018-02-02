@@ -1,21 +1,16 @@
 import const
 import P4Summary
 import chardet
-import time
 
 def main():
-    # try:
-    #     start_time = time.time()?
-        global jira
-        jira = const.connect_jira()
+    global jira
+    jira = const.connect_jira()
 
-        worksheet_60 = const.connect_google_spreadsheet('[EN] 6.0 SP3 Patch 3')
-        hotfix_list_60 = prepare_case_list(worksheet_60)
-        worksheet_readme = const.connect_google_spreadsheet('[EN] 6.0 SP3 Patch 3 Readme')
-        insert_hotfix(worksheet_readme, hotfix_list_60)
-        update_readme(worksheet_readme)
-    # finally:
-    #     print("time elapsed: {:.2f}s".format(time.time() - start_time))
+    worksheet_60 = const.connect_google_spreadsheet('[EN] 6.0 SP3 Patch 3')
+    hotfix_list_60 = prepare_case_list(worksheet_60)
+    worksheet_readme = const.connect_google_spreadsheet('[L10N] 6.0 Readme')
+    insert_hotfix(worksheet_readme, hotfix_list_60)
+    update_readme(worksheet_readme)
 
 def prepare_case_list(worksheet_60):
     print('prepare_case_list...')
@@ -39,14 +34,12 @@ def insert_hotfix(worksheet_readme, hotfix_list_60):
             for case in hotfix[1]:
                 worksheet_readme.insert_row([hotfix[0], case, '', '', '', '', hotfix[2]], row_count)
                 row_count += 1
-    # print()
 
 def update_readme(worksheet_readme):
     print('update_readme...')
     cursor_row_count = 2
     while worksheet_readme.cell(cursor_row_count, 2).value != '':
         case = (worksheet_readme.cell(cursor_row_count, 2).value)
-        # print(case)
         if worksheet_readme.cell(cursor_row_count, 4).value == '' or worksheet_readme.cell(cursor_row_count, 5).value == '' or worksheet_readme.cell(cursor_row_count, 6).value == '':
             readme_case = get_readme_from_jira(case)
             if worksheet_readme.cell(cursor_row_count, 4).value == '' and readme_case['jp'] != '':
