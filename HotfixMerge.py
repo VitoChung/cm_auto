@@ -6,8 +6,6 @@ from jira import JIRA
 
 def main():
     print('Update Spreadsheet for merged Hotfix...')
-    # import time
-    # start_time = time.time()
 
     scope = [const.google_sheet_url]
     credentials = SAC.from_json_keyfile_name(const.google_json_file, scope)
@@ -18,10 +16,10 @@ def main():
     next_data = P4Summary.exist_hotfix(worksheet_60)
     row_count = next_data[0]
 
-    # caseID = 'SEG-18510'
-    # print(get_link_from_jira(caseID))
+    # update spreadsheet from Jira link
+    global jira
+    jira = JIRA(server=const.jira_server, basic_auth=(const.jira_account, const.jira_password))
 
-    # update
     for cursor_row_count in range(2, row_count):
         readme_hotfix_number = P4Summary.get_hotfix_number(worksheet_60.cell(cursor_row_count, 2).value)
         if readme_hotfix_number != '' and int(readme_hotfix_number) > 3686:    # the last hotfix merged intto TMCM 7.0 GM from TMCM 6.0
@@ -40,11 +38,7 @@ def main():
                             worksheet_60.update_cell(cursor_row_count, 12, tmp_merge_link.strip('\n'))
 
 
-    # print("time elapsed: {:.2f}s".format(time.time() - start_time))
-
-
 def get_link_from_jira(ticket_number):
-    jira = JIRA(server=const.jira_server, basic_auth=(const.jira_account, const.jira_password))
     issue = jira.issue(ticket_number)
     link_list = ''
     for link in issue.fields.issuelinks:
