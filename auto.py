@@ -17,7 +17,7 @@ def main():
             CopyBuildBackup.main()
             print('')
             P4Summary.main()
-            HotfixMerge.main()
+            # HotfixMerge.main()
 
         except Exception as e:
             # log(str(e), level.error)
