@@ -8,17 +8,11 @@ import imaplib
 
 import socket
 from smb.SMBConnection import SMBConnection
-import shutil
 import stat
 
 def main():
         ### get mail
         try:
-            # print('Remove local folder...')
-            # local_backup_folder = const.HF_Working_Folder + '\\Build'
-            # if os.path.isdir(local_backup_folder):
-            #     shutil.rmtree(local_backup_folder, onerror=on_rm_error)
-
             url = const.trend_mail_server
             mail_conn = imaplib.IMAP4_SSL(url, 993)
             user, password = (const.trend_account, const.trend_password)
@@ -74,7 +68,6 @@ def main():
             # log(str(e), level.error)
             print(str(e))
             pass
-
 
 def process_multipart_message(message):
     rtn = ''
