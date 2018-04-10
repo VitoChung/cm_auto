@@ -177,6 +177,14 @@ def update_spreadsheet(hotfixes, readme):
         (str(readme.get(readme_hotfix_number)) != 'None' and str(readme.get(readme_hotfix_number)) != ''):
       worksheet.update_cell(empty_row_count, 4, readme.get(readme_hotfix_number))
 
+  export_spreadsheet(worksheet)
+
+def export_spreadsheet(worksheet):
+    export_file = worksheet.export(format='xlsx')
+    f = open('filename.xlsx', 'wb')
+    f.write(export_file)
+    f.close()
+
 def login_hotfix_portal():
   print('Login Portal...')
 
