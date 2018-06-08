@@ -4,7 +4,7 @@ import CopyBuildBackup
 import JiraReadme
 import os
 
-timefreq = 1800
+timefreq = 3600
 
 def main():
     while 1:
@@ -17,7 +17,7 @@ def main():
             CopyBuildBackup.main()
             print('')
             P4Summary.main()
-            JiraReadme.main()
+            # JiraReadme.main()
 
         except Exception as e:
             # log(str(e), level.error)
